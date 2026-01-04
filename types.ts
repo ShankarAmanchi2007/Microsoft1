@@ -17,6 +17,18 @@ export interface Project {
   views: number;
 }
 
+export interface Achievement {
+  title: string;
+  description: string;
+  icon: string;
+}
+
+export interface Reward {
+  name: string;
+  year: string;
+  platform: string;
+}
+
 export interface Developer {
   id: string;
   name: string;
@@ -26,6 +38,9 @@ export interface Developer {
   github: string;
   contactEmail: string;
   projects: Project[];
+  achievements: Achievement[];
+  rewards: Reward[];
+  rank?: string;
 }
 
 export interface User {
