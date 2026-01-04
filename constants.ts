@@ -75,30 +75,59 @@ export const MOCK_DEVELOPERS: Developer[] = [
     id: 'dev1',
     name: 'Alex Rivera',
     avatar: 'https://i.pravatar.cc/150?u=dev1',
-    skills: ['React', 'System Architecture', 'UI/UX', 'Cloud Infrastructure'],
+    skills: ['React', 'System Architecture', 'UI/UX', 'Cloud Infrastructure', 'Node.js', 'PostgreSQL'],
     bio: 'Crafting polished digital experiences that bridge the gap between imagination and execution. Specialized in complex SaaS architectures and fluid, desktop-grade web interfaces.',
     github: 'https://github.com/alexrivera',
     contactEmail: 'alex@buildspace.com',
-    projects: MOCK_PROJECTS.filter(p => p.authorId === 'dev1')
+    projects: MOCK_PROJECTS.filter(p => p.authorId === 'dev1'),
+    rank: 'Top 1% Global',
+    achievements: [
+      { title: 'Zero Latency Engine', description: 'Optimized real-time data sync for enterprise dashboards by 60%.', icon: '⚡' },
+      { title: 'Open Source Visionary', description: 'Contributor to 10+ major React libraries with 5k+ stars.', icon: '🌟' },
+      { title: 'Security Architect', description: 'Designed end-to-end encryption for 3 unicorn fintech apps.', icon: '🛡️' }
+    ],
+    rewards: [
+      { name: 'Architect of the Year', year: '2024', platform: 'BuildSpace' },
+      { name: 'Most Innovative UI', year: '2023', platform: 'DevConf' },
+      { name: '100+ Verified Deployments', year: '2024', platform: 'AWS' }
+    ]
   },
   {
     id: 'dev2',
     name: 'Sarah Chen',
     avatar: 'https://i.pravatar.cc/150?u=dev2',
-    skills: ['WebGL', 'Motion Graphics', 'Creative Coding', 'Data Viz'],
+    skills: ['WebGL', 'Motion Graphics', 'Creative Coding', 'Data Viz', 'Three.js', 'Rust'],
     bio: 'Pushing the boundaries of what is possible in the browser. I build immersive, interactive visual tools, generative art, and high-performance data visualizations.',
     github: 'https://github.com/schen',
     contactEmail: 'sarah@buildspace.com',
-    projects: MOCK_PROJECTS.filter(p => p.authorId === 'dev2')
+    projects: MOCK_PROJECTS.filter(p => p.authorId === 'dev2'),
+    rank: 'Visual Master',
+    achievements: [
+      { title: '60FPS WebGL Renderer', description: 'Built a browser engine capable of rendering 1M+ polygons smoothly.', icon: '🎨' },
+      { title: 'Creative Coding Lead', description: 'Spearheaded the visual identity for 3 major digital art festivals.', icon: '🎭' }
+    ],
+    rewards: [
+      { name: 'Best Visual Design', year: '2024', platform: 'Awwwards' },
+      { name: 'Top Creative Tech', year: '2023', platform: 'GitHub Universe' }
+    ]
   },
   {
     id: 'dev3',
     name: 'Marcus Volt',
     avatar: 'https://i.pravatar.cc/150?u=dev3',
-    skills: ['Security', 'Blockchain', 'Rust', 'Systems Engineering'],
+    skills: ['Security', 'Blockchain', 'Rust', 'Systems Engineering', 'Solidity', 'Go'],
     bio: 'Building robust, secure foundations for the next generation of the web. My focus is on high-performance systems, cryptographic integrity, and privacy-preserving architectures.',
     github: 'https://github.com/mvolt',
     contactEmail: 'marcus@buildspace.com',
-    projects: MOCK_PROJECTS.filter(p => p.authorId === 'dev3')
+    projects: MOCK_PROJECTS.filter(p => p.authorId === 'dev3'),
+    rank: 'Systems Expert',
+    achievements: [
+      { title: 'Multi-Chain Protocol', description: 'Designed a cross-chain liquidity bridge with $20M+ TVL.', icon: '⛓️' },
+      { title: 'Privacy First Auth', description: 'Authored a zero-knowledge proof library for mobile authentication.', icon: '🗝️' }
+    ],
+    rewards: [
+      { name: 'Web3 Innovator', year: '2024', platform: 'EthGlobal' },
+      { name: 'Secure System Award', year: '2023', platform: 'DefCon' }
+    ]
   }
 ];
