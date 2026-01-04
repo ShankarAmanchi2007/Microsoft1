@@ -1,0 +1,7 @@
+{
+  "name": "BuildSpace",
+  "description": "A premium platform for creators to showcase builds, share demos, and connect with potential buyers and collaborators.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
