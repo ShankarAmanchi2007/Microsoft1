@@ -15,6 +15,26 @@ export interface Project {
   authorName: string;
   authorAvatar: string;
   views: number;
+  audit?: TrustAudit; // New Field
+}
+
+export interface TrustBreakdown {
+  maintainability: number;
+  security: number;
+  documentation: number;
+  relevance: number;
+  readiness: number;
+  ethics: number;
+}
+
+export interface TrustAudit {
+  score: number;
+  level: 'High' | 'Medium' | 'Low';
+  breakdown: TrustBreakdown;
+  reasoning: string;
+  recommendations: string[];
+  redFlags: string[];
+  timestamp: string;
 }
 
 export interface Achievement {
