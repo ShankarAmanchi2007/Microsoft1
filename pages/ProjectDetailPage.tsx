@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { MOCK_PROJECTS } from '../constants';
 import { GoogleGenAI } from "@google/genai";
 import { useLocalization } from '../App';
@@ -30,10 +30,10 @@ const ProjectDetailPage: React.FC = () => {
   ];
 
   const explainerLoadingMessages = [
-    "Deconstructing architecture...",
-    "Removing technical jargon...",
-    "Finding the 'Aha!' moment...",
-    "Finalizing mentor notes..."
+    "Reading technical docs...",
+    "Translating complex jargon...",
+    "Crafting a friendly analogy...",
+    "Polishing the explanation..."
   ];
   const [explainerStep, setExplainerStep] = useState(0);
 
@@ -58,7 +58,7 @@ const ProjectDetailPage: React.FC = () => {
     if (isAiSimplifying) {
       interval = setInterval(() => {
         setExplainerStep(prev => (prev < explainerLoadingMessages.length - 1 ? prev + 1 : prev));
-      }, 700);
+      }, 800);
     } else {
       setExplainerStep(0);
     }
@@ -82,24 +82,26 @@ const ProjectDetailPage: React.FC = () => {
     if (aiSummary) { setAiSummary(null); return; }
     setIsAiSimplifying(true);
     try {
-      // Create a fresh instance for the call
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: `Explain the core value and purpose of this project as if I am a non-technical person. 
-        Focus on WHY it matters and HOW it helps someone. 
+        contents: `I want you to explain this technical project to someone who is NOT a programmer.
         Project Name: ${project.title}. 
         Technical Description: ${project.fullDescription}.
-        Tone: Friendly, educational, and encouraging. 
-        Length: 2-3 clear sentences.`,
+        
+        Requirements:
+        1. Use a very friendly, encouraging, and educational tone.
+        2. Use a simple analogy if possible.
+        3. Explain what it actually DOES for a user, not how it works internally.
+        4. Keep it to 3 clear sentences.`,
         config: {
-          systemInstruction: "You are the 'BuildSpace Mentor', a friendly expert who loves simplifying complex engineering for non-engineers."
+          systemInstruction: "You are a patient and kind technology mentor. Your goal is to make everyone feel smart and capable of understanding complex tools."
         }
       });
-      setAiSummary(response.text || "I'm having a little trouble simplifying this right now. Let's try again in a moment!");
+      setAiSummary(response.text || "I'm having a moment to think. Let's try again!");
     } catch (error) {
       console.error("Mentor Error:", error);
-      setAiSummary("My connection to the mentor network was interrupted. Please re-initialize.");
+      setAiSummary("My connection to the teaching hub was interrupted. Please try again later!");
     } finally {
       setIsAiSimplifying(false);
     }
@@ -181,59 +183,80 @@ const ProjectDetailPage: React.FC = () => {
           <div className="bg-zinc-950 border border-zinc-800 rounded-[3.5rem] overflow-hidden">
             <img src={project.image} className="w-full aspect-video object-cover" alt="" />
             <div className="p-12">
-              <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-16">
+              <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-12">
                 <div>
                   <h1 className="text-6xl font-black tracking-tighter mb-4 uppercase">{project.title}</h1>
                   <p className="text-purple-500 font-black text-xl hover:text-purple-400 cursor-pointer">{project.authorName}</p>
                 </div>
               </div>
 
-              {/* PROJECT MENTOR SECTION */}
-              <div className="mb-16">
-                <div className="relative group/mentor">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 rounded-[2.5rem] blur opacity-75 group-hover/mentor:opacity-100 transition duration-1000"></div>
-                  <div className="relative bg-zinc-900/40 border border-zinc-800/50 p-8 md:p-10 rounded-[2.5rem] backdrop-blur-xl">
-                    <div className="flex flex-col md:flex-row items-center gap-8">
-                      <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center text-3xl shadow-xl shrink-0">
-                        🎓
+              {/* AI PROJECT MENTOR - ENHANCED EDUCATIONAL DESIGN */}
+              <div className="mb-16 relative">
+                <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/20 to-teal-500/20 rounded-[3rem] blur-lg opacity-70"></div>
+                <div className="relative bg-zinc-900/60 border border-zinc-800/80 p-8 md:p-12 rounded-[3rem] backdrop-blur-2xl">
+                  <div className="flex flex-col md:flex-row items-center gap-10">
+                    <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-amber-600 rounded-[2rem] flex items-center justify-center text-4xl shadow-2xl shrink-0 animate-bounce-slow">
+                      💡
+                    </div>
+                    <div className="flex-1 text-center md:text-left">
+                      <div className="flex items-center justify-center md:justify-start gap-3 mb-3">
+                        <h3 className="text-white font-black text-2xl tracking-tight uppercase">Project Mentor</h3>
+                        <span className="bg-emerald-500/10 text-emerald-400 text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded-md border border-emerald-500/20">Verified AI Insight</span>
                       </div>
-                      <div className="flex-1 text-center md:text-left">
-                        <h3 className="text-white font-black text-xl tracking-tight mb-2 uppercase">Project Mentor</h3>
-                        <p className="text-zinc-500 text-sm font-medium mb-6">Confused by the tech stack? Let's break it down into plain English.</p>
-                        
-                        {!aiSummary && !isAiSimplifying && (
-                          <button 
-                            onClick={fetchSimpleExplanation}
-                            className="bg-white text-black hover:bg-zinc-200 px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all shadow-xl active:scale-95 flex items-center gap-3 mx-auto md:mx-0"
-                          >
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 10-2 0c0-1.103-.897-2-2-2h-1.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L12.414 10H14c2.206 0 4 1.794 4 4v1a1 1 0 102 0v-1c0-2.206-1.794-4-4-4z"/></svg>
-                            Explain in Simple Terms
-                          </button>
-                        )}
+                      <p className="text-zinc-400 text-base font-medium mb-8 leading-relaxed">
+                        Technology is for everyone. Let our AI mentor translate the technical details into a simple, friendly story just for you.
+                      </p>
+                      
+                      {!aiSummary && !isAiSimplifying && (
+                        <button 
+                          onClick={fetchSimpleExplanation}
+                          className="bg-amber-500 hover:bg-amber-400 text-black px-10 py-4.5 rounded-[1.5rem] text-[11px] font-black uppercase tracking-[0.2em] transition-all shadow-[0_10px_30px_rgba(245,158,11,0.3)] active:scale-95 flex items-center gap-3 mx-auto md:mx-0 group"
+                        >
+                          <svg className="w-5 h-5 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 20 20"><path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 10-2 0c0-1.103-.897-2-2-2h-1.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L12.414 10H14c2.206 0 4 1.794 4 4v1a1 1 0 102 0v-1c0-2.206-1.794-4-4-4z"/></svg>
+                          Explain in Simple Terms
+                        </button>
+                      )}
 
-                        {isAiSimplifying && (
-                          <div className="flex items-center gap-4 text-blue-400 justify-center md:justify-start">
-                            <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                            <span className="text-[10px] font-black uppercase tracking-[0.3em] animate-pulse">
+                      {isAiSimplifying && (
+                        <div className="space-y-4">
+                          <div className="flex items-center gap-4 text-amber-400 justify-center md:justify-start">
+                            <div className="w-6 h-6 border-3 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+                            <span className="text-xs font-black uppercase tracking-[0.3em] animate-pulse">
                               {explainerLoadingMessages[explainerStep]}
                             </span>
                           </div>
-                        )}
+                          <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-amber-500 transition-all duration-500 ease-out" 
+                              style={{ width: `${(explainerStep + 1) * 25}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {aiSummary && (
+                    <div className="mt-12 pt-10 border-t border-zinc-800/50 animate-in fade-in slide-in-from-top-8 duration-1000">
+                      <div className="flex items-center gap-3 mb-8">
+                        <span className="text-[10px] font-black text-amber-500 uppercase tracking-[0.3em] bg-amber-500/10 px-5 py-2 rounded-full border border-amber-500/20">The Friendly Version</span>
+                        <button 
+                          onClick={() => setAiSummary(null)} 
+                          className="text-zinc-600 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors ml-auto flex items-center gap-2"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                          Refresh
+                        </button>
+                      </div>
+                      <div className="bg-zinc-950/40 p-10 rounded-[2.5rem] border border-zinc-800/50 relative">
+                        <div className="absolute -top-4 -left-4 text-6xl text-amber-500/20 font-serif">“</div>
+                        <p className="text-zinc-100 text-xl md:text-2xl leading-relaxed font-medium italic relative z-10">
+                          {aiSummary}
+                        </p>
+                        <div className="absolute -bottom-10 -right-4 text-6xl text-amber-500/20 font-serif">”</div>
                       </div>
                     </div>
-
-                    {aiSummary && (
-                      <div className="mt-10 pt-10 border-t border-zinc-800/50 animate-in fade-in slide-in-from-top-6 duration-700">
-                        <div className="flex items-center gap-3 mb-6">
-                          <span className="text-[9px] font-black text-blue-400 uppercase tracking-[0.3em] bg-blue-500/10 px-4 py-1.5 rounded-full border border-blue-500/20">Simplified Translation</span>
-                          <button onClick={() => setAiSummary(null)} className="text-zinc-600 hover:text-white text-[9px] font-black uppercase tracking-widest transition-colors ml-auto">Reset</button>
-                        </div>
-                        <p className="text-zinc-200 text-lg md:text-xl leading-relaxed font-medium italic">
-                          "{aiSummary}"
-                        </p>
-                      </div>
-                    )}
-                  </div>
+                  )}
                 </div>
               </div>
 
@@ -264,6 +287,16 @@ const ProjectDetailPage: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      <style>{`
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+        .animate-bounce-slow {
+          animation: bounce-slow 4s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
 };
