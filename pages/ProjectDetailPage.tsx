@@ -11,12 +11,15 @@ const ProjectDetailPage: React.FC = () => {
   const { t, formatPrice } = useLocalization();
   const project = MOCK_PROJECTS.find(p => p.id === id);
   
+  // AI Simplification States
   const [isAiSimplifying, setIsAiSimplifying] = useState(false);
   const [aiSummary, setAiSummary] = useState<string | null>(null);
+  const [explainerStep, setExplainerStep] = useState(0);
+
+  // General UI States
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [checkoutStep, setCheckoutStep] = useState<'method' | 'processing' | 'success'>('method');
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'upi' | 'wallet'>('card');
-
   const [demoState, setDemoState] = useState<'idle' | 'loading' | 'active'>('idle');
   const [loadingStep, setLoadingStep] = useState(0);
 
@@ -35,7 +38,6 @@ const ProjectDetailPage: React.FC = () => {
     "Crafting a friendly analogy...",
     "Polishing the explanation..."
   ];
-  const [explainerStep, setExplainerStep] = useState(0);
 
   useEffect(() => {
     let interval: any;
@@ -82,6 +84,7 @@ const ProjectDetailPage: React.FC = () => {
     if (aiSummary) { setAiSummary(null); return; }
     setIsAiSimplifying(true);
     try {
+      // Create a fresh instance for the call
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
@@ -172,7 +175,7 @@ const ProjectDetailPage: React.FC = () => {
         </div>
       )}
 
-      {/* Main Content */}
+      {/* Main Navigation */}
       <button onClick={() => navigate(-1)} className="text-zinc-500 hover:text-purple-500 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] mb-12 group">
         <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M15 19l-7-7 7-7"/></svg>
         Return
@@ -190,7 +193,7 @@ const ProjectDetailPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* AI PROJECT MENTOR - ENHANCED EDUCATIONAL DESIGN */}
+              {/* AI PROJECT MENTOR SECTION */}
               <div className="mb-16 relative">
                 <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/20 to-teal-500/20 rounded-[3rem] blur-lg opacity-70"></div>
                 <div className="relative bg-zinc-900/60 border border-zinc-800/80 p-8 md:p-12 rounded-[3rem] backdrop-blur-2xl">
@@ -272,6 +275,7 @@ const ProjectDetailPage: React.FC = () => {
           </div>
         </div>
 
+        {/* Sidebar Licensing & Pricing */}
         <div className="lg:col-span-4 space-y-10">
           <div className="sticky top-32 space-y-10">
             <div className="bg-zinc-950 border border-purple-500/20 p-10 rounded-[3.5rem] shadow-2xl">
